@@ -5,10 +5,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
 
 @Configuration
-public class RedisConfiguration {
+public class RedisConnectionConfiguration {
 
     @Bean
     public RedisStandaloneConfiguration redisConfig(
@@ -22,13 +21,6 @@ public class RedisConfiguration {
     @Bean
     public JedisConnectionFactory jedisConnectionFactory(RedisStandaloneConfiguration jedisConfig) {
         return new JedisConnectionFactory(jedisConfig);
-    }
-
-    @Bean
-    public RedisTemplate<String, Object> redisTemplate(JedisConnectionFactory connFactory) {
-        RedisTemplate<String, Object> template = new RedisTemplate<>();
-        template.setConnectionFactory(connFactory);
-        return template;
     }
 
 }

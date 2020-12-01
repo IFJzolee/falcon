@@ -37,7 +37,7 @@ public class LongestPalindromeControllerTest {
 
     @Test
     public void create_withNullValues() throws Exception {
-        var request = new CreatePalindromeRequest(null, null);
+        var request = new PalindromeTask(null, null);
 
         mockMvc.perform(post(BASE_PATH)
             .contentType(APPLICATION_JSON)
@@ -47,7 +47,7 @@ public class LongestPalindromeControllerTest {
 
     @Test
     public void create_withEmptyContent() throws Exception {
-        var request = new CreatePalindromeRequest("", OffsetDateTime.now());
+        var request = new PalindromeTask("", OffsetDateTime.now());
 
         mockMvc.perform(post(BASE_PATH)
             .contentType(APPLICATION_JSON)
@@ -70,7 +70,7 @@ public class LongestPalindromeControllerTest {
     public void create_properTimestampParsing() throws Exception {
         String content = "abrakadabra";
         OffsetDateTime timestamp = OffsetDateTime.of(2018, 10, 9, 0, 12, 12, 0, ZoneOffset.ofHours(1));
-        CreatePalindromeRequest expectedTask = new CreatePalindromeRequest(content, timestamp);
+        PalindromeTask expectedTask = new PalindromeTask(content, timestamp);
 
         mockMvc.perform(post(BASE_PATH)
             .contentType(APPLICATION_JSON)
@@ -80,7 +80,7 @@ public class LongestPalindromeControllerTest {
                 + "}", content)))
             .andExpect(status().isOk());
 
-        ArgumentCaptor<CreatePalindromeRequest> captor = ArgumentCaptor.forClass(CreatePalindromeRequest.class);
+        ArgumentCaptor<PalindromeTask> captor = ArgumentCaptor.forClass(PalindromeTask.class);
         verify(palindromeTaskPublisher).publish(captor.capture());
         assertThat(captor.getValue()).isEqualTo(expectedTask);
     }

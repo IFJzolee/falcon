@@ -9,17 +9,17 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class PalindromeTaskPublisher {
 
-    private final RedisTemplate<String, CreatePalindromeRequest> redisTemplate;
+    private final RedisTemplate<String, PalindromeTask> redisTemplate;
     private final String topic;
 
     public PalindromeTaskPublisher(
-        RedisTemplate<String, CreatePalindromeRequest> redisTemplate,
+        RedisTemplate<String, PalindromeTask> redisTemplate,
         @Value("${palindrome-task.topic}") String topic) {
         this.redisTemplate = redisTemplate;
         this.topic = topic;
     }
 
-    public void publish(CreatePalindromeRequest message) {
+    public void publish(PalindromeTask message) {
         log.info("Publishing to topic `{}`, message: {}", topic, message);
         redisTemplate.convertAndSend(topic, message);
     }

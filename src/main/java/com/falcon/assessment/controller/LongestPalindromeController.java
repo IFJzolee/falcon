@@ -24,7 +24,7 @@ public class LongestPalindromeController {
     }
 
     @PostMapping
-    public void createPalindrome(@RequestBody @Valid CreatePalindromeRequest request) {
+    public void createPalindrome(@RequestBody @Valid PalindromeTask request) {
         log.info("Received: {}", request);
         palindromeTaskPublisher.publish(request);
     }

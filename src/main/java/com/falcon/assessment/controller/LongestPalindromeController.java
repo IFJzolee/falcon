@@ -17,9 +17,16 @@ public class LongestPalindromeController {
 
     public static final String BASE_PATH = "/palindrome";
 
+    private final PalindromeTaskPublisher palindromeTaskPublisher;
+
+    public LongestPalindromeController(PalindromeTaskPublisher palindromeTaskPublisher) {
+        this.palindromeTaskPublisher = palindromeTaskPublisher;
+    }
+
     @PostMapping
     public void createPalindrome(@RequestBody @Valid CreatePalindromeRequest request) {
-        log.info("Got: {}", request);
+        log.info("Received: {}", request);
+        palindromeTaskPublisher.publish(request);
     }
 
 }

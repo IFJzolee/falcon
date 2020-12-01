@@ -1,4 +1,4 @@
-package com.falcon.assesment.controller;
+package com.falcon.assessment.controller;
 
 import java.time.OffsetDateTime;
 

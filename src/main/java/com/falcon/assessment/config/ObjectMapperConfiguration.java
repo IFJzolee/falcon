@@ -1,4 +1,4 @@
-package com.falcon.assesment.config;
+package com.falcon.assessment.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;

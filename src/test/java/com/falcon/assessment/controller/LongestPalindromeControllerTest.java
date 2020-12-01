@@ -1,13 +1,13 @@
-package com.falcon.assesment.controller;
+package com.falcon.assessment.controller;
 
-import static com.falcon.assesment.controller.LongestPalindromeController.BASE_PATH;
+import static com.falcon.assessment.controller.LongestPalindromeController.BASE_PATH;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.OffsetDateTime;
 
-import com.falcon.assesment.config.ObjectMapperConfiguration;
+import com.falcon.assessment.config.ObjectMapperConfiguration;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;

@@ -1,6 +1,6 @@
-package com.falcon.assesment.controller;
+package com.falcon.assessment.controller;
 
-import static com.falcon.assesment.controller.LongestPalindromeController.BASE_PATH;
+import static com.falcon.assessment.controller.LongestPalindromeController.BASE_PATH;
 
 import javax.validation.Valid;
 

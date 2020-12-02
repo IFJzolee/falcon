@@ -26,7 +26,6 @@ public class PalindromeTaskListener implements MessageListener {
     }
 
     private void handleTask(PalindromeTask task) {
-
     }
 
 }

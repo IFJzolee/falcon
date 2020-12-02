@@ -1,6 +1,8 @@
 package com.falcon.assessment.listener;
 
 import com.falcon.assessment.controller.PalindromeTask;
+import com.falcon.assessment.service.PalindromeService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
@@ -8,24 +10,19 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.stereotype.Component;
 
 @Component
+@AllArgsConstructor
 @Slf4j
 public class PalindromeTaskListener implements MessageListener {
 
     private final Jackson2JsonRedisSerializer<PalindromeTask> serializer;
-
-    public PalindromeTaskListener(Jackson2JsonRedisSerializer<PalindromeTask> serializer) {
-        this.serializer = serializer;
-    }
+    private final PalindromeService palindromeService;
 
     @Override
     public void onMessage(Message message, byte[] pattern) {
-        PalindromeTask palindromeTask = serializer.deserialize(message.getBody());
-        log.info("Received from topic `{}`, message: {}", new String(pattern), palindromeTask);
+        PalindromeTask task = serializer.deserialize(message.getBody());
+        log.info("Received from topic `{}`, message: {}", new String(pattern), task);
 
-        handleTask(palindromeTask);
-    }
-
-    private void handleTask(PalindromeTask task) {
+        palindromeService.processTask(task);
     }
 
 }

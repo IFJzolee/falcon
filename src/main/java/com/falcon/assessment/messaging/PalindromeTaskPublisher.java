@@ -1,5 +1,6 @@
-package com.falcon.assessment.controller;
+package com.falcon.assessment.messaging;
 
+import com.falcon.assessment.domain.PalindromeTask;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;

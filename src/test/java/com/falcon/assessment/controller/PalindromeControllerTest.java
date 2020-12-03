@@ -1,6 +1,6 @@
 package com.falcon.assessment.controller;
 
-import static com.falcon.assessment.controller.LongestPalindromeController.BASE_PATH;
+import static com.falcon.assessment.controller.PalindromeController.BASE_PATH;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -11,6 +11,8 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
 import com.falcon.assessment.config.ObjectMapperConfiguration;
+import com.falcon.assessment.domain.PalindromeTask;
+import com.falcon.assessment.messaging.PalindromeTaskPublisher;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
@@ -24,9 +26,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(controllers = LongestPalindromeController.class)
+@WebMvcTest(controllers = PalindromeController.class)
 @Import(ObjectMapperConfiguration.class)
-public class LongestPalindromeControllerTest {
+public class PalindromeControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

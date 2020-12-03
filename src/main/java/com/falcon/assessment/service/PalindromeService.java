@@ -1,6 +1,6 @@
 package com.falcon.assessment.service;
 
-import com.falcon.assessment.controller.PalindromeTask;
+import com.falcon.assessment.domain.PalindromeTask;
 import com.falcon.assessment.dao.PalindromeRepository;
 import com.falcon.assessment.dao.PalindromeTaskEntity;
 import lombok.AllArgsConstructor;

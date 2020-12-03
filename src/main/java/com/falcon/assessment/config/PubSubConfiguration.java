@@ -1,7 +1,7 @@
 package com.falcon.assessment.config;
 
-import com.falcon.assessment.controller.PalindromeTask;
-import com.falcon.assessment.listener.PalindromeTaskListener;
+import com.falcon.assessment.domain.PalindromeTask;
+import com.falcon.assessment.messaging.PalindromeTaskListener;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

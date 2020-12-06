@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class PalindromeController {
 
-    public static final String BASE_PATH = "/palindrome";
+    public static final String BASE_PATH = "/api/palindrome";
 
     private final PalindromeTaskPublisher palindromeTaskPublisher;
 

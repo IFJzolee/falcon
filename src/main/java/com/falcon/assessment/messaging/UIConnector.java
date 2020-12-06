@@ -1,6 +1,6 @@
 package com.falcon.assessment.messaging;
 
-import static com.falcon.assessment.config.WebSocketConfiguration.TOPIC_DESTINATION_PREFIX;
+import static com.falcon.assessment.messaging.WsTopicNameFactory.websocketTopic;
 
 import com.falcon.assessment.domain.PalindromeTask;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ public class UIConnector {
 
     public UIConnector(SimpMessagingTemplate messagingTemplate, @Value("${ui.palindrome-task.topic}") String topic) {
         this.messagingTemplate = messagingTemplate;
-        this.topic = TOPIC_DESTINATION_PREFIX + topic;
+        this.topic = websocketTopic(topic);
     }
 
     public void broadcastPalindromeTask(PalindromeTask task) {

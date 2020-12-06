@@ -1,6 +1,6 @@
 package com.falcon.assessment.service;
 
-import static com.falcon.assessment.config.WebSocketConfiguration.TOPIC_DESTINATION_PREFIX;
+import static com.falcon.assessment.messaging.WsTopicNameFactory.websocketTopic;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
@@ -51,8 +51,7 @@ public class PalindromeServiceIT {
     public void processTask_storesTaskAndPublishesToUIClients() throws InterruptedException {
         var initLatch = new CountDownLatch(1);
         var finishLatch = new CountDownLatch(1);
-        // TODO topic name factory
-        var stompHandler = new PalindromeTaskStompConsumer(initLatch, finishLatch, TOPIC_DESTINATION_PREFIX + topic);
+        var stompHandler = new PalindromeTaskStompConsumer(initLatch, finishLatch, websocketTopic(topic));
 
         var wsClient = new StandardWebSocketClient();
         var stompClient = new WebSocketStompClient(wsClient);

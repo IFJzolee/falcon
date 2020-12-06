@@ -23,6 +23,9 @@
     <webjars.jquery.version>3.1.1-1</webjars.jquery.version>
     <webjars.sockjs.version>1.0.2</webjars.sockjs.version>
     <webjars.stomp.version>2.3.3</webjars.stomp.version>
+
+    <docker.maven.plugin.version>1.2.0</docker.maven.plugin.version>
+    <docker.image.name>falcon-assessment</docker.image.name>
   </properties>
 
   <dependencies>
@@ -220,6 +223,39 @@
             <version>${maven.surfire.version}</version>
           </dependency>
         </dependencies>
+      </plugin>
+
+      <plugin>
+        <groupId>com.spotify</groupId>
+        <artifactId>docker-maven-plugin</artifactId>
+        <version>${docker.maven.plugin.version}</version>
+        <configuration>
+          <imageName>${docker.image.name}</imageName>
+          <buildArgs>
+            <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+          </buildArgs>
+          <dockerDirectory>src/main/docker</dockerDirectory>
+          <resources>
+            <resource>
+              <targetPath>/</targetPath>
+              <directory>${project.build.directory}</directory>
+              <include>${project.build.finalName}.jar</include>
+            </resource>
+          </resources>
+          <imageTags>
+            <imageTag>${project.version}</imageTag>
+            <imageTag>latest</imageTag>
+          </imageTags>
+        </configuration>
+        <executions>
+          <execution>
+            <id>build-image</id>
+            <phase>package</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

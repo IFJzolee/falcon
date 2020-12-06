@@ -24,6 +24,7 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
             .setHandshakeHandler(new DefaultHandshakeHandler(upgradeStrategy));
     }
 
+    // TODO replace in memory message broker with 3rd party
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableSimpleBroker(TOPIC_DESTINATION_PREFIX);

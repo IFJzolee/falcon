@@ -16,6 +16,10 @@ public class PalindromeService {
     private final UIConnector uiConnector;
 
     public void processTask(PalindromeTask task) {
+        /* TODO generate unique ID on publish side and ignore db conflict
+        inorder to prevent multiple inserts in a multi instance env.
+        Could be easily avoided if the task was stored at the time of rest reception.
+        */
         PalindromeTaskEntity entity = taskMapper.taskToEntity(task);
         palindromeRepository.save(entity);
 

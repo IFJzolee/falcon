@@ -22,7 +22,10 @@ public class PalindromeTaskEntity {
     private String content;
     @Column
     private OffsetDateTime timestamp;
-    @Column
-    private String timestampOffset;
+
+    public PalindromeTaskEntity(String content, OffsetDateTime timestamp) {
+        this.content = content;
+        this.timestamp = timestamp;
+    }
 
 }

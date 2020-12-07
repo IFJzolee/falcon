@@ -1,10 +1,10 @@
 package com.falcon.assessment.dao;
 
+import static java.time.ZoneOffset.UTC;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,13 +27,12 @@ public class PalindromeRepositoryIT {
     private EntityManager entityManager;
 
     @Test
-    public void saveWorks() {
-        var dateString = "2007-12-03T10:15:30+02:00";
-        var date = OffsetDateTime.parse(dateString);
+    public void savesAndGet() {
+        var date = OffsetDateTime.parse("2007-12-03T10:15:30+02:00");
+        var expectedUtcDate = date.withOffsetSameInstant(UTC);
         var palindromeTask = PalindromeTaskEntity.builder()
             .content("content")
             .timestamp(date)
-            .timestampOffset("+02:00")
             .build();
 
         PalindromeTaskEntity saved = palindromeRepo.save(palindromeTask);
@@ -42,10 +41,7 @@ public class PalindromeRepositoryIT {
         assertThat(saved.getId()).isNotNull();
         saved = palindromeRepo.findById(saved.getId()).get();
         assertThat(saved.getContent()).isEqualTo(palindromeTask.getContent());
-        assertThat(saved.getTimestampOffset()).isEqualTo(palindromeTask.getTimestampOffset());
-        OffsetDateTime savedAdjustedDate = saved.getTimestamp()
-            .withOffsetSameInstant(ZoneOffset.of(saved.getTimestampOffset()));
-        assertThat(savedAdjustedDate).isEqualTo(palindromeTask.getTimestamp());
+        assertThat(saved.getTimestamp()).isEqualTo(expectedUtcDate);
     }
 
     private void flushAndClearPersistenceCtx() {

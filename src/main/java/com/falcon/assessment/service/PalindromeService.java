@@ -42,7 +42,6 @@ public class PalindromeService {
 
         // TODO It's ineffective to calculate it on the fly, but it is in the requirement...
         return entities.stream()
-            .map(taskMapper::entityToTask)
             .map(palindromeCalculator::calculate)
             .collect(toList());
     }

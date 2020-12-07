@@ -1,6 +1,7 @@
 package com.falcon.assessment.service;
 
 import static com.falcon.assessment.messaging.WsTopicNameFactory.websocketTopic;
+import static java.time.ZoneOffset.UTC;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
@@ -41,8 +42,6 @@ public class PalindromeServiceIT {
     @Autowired
     private PalindromeRepository palindromeRepo;
     @Autowired
-    private PalindromeTaskMapper taskMapper;
-    @Autowired
     private MessageConverter messageConverter;
     @Value("${ui.palindrome-task.topic}")
     private String topic;
@@ -61,10 +60,7 @@ public class PalindromeServiceIT {
         stompClient.connect(String.format("ws://localhost:%d/connect", port),
             stompHandler);
 
-        var dateString = "2007-12-03T10:15:30+02:00";
-        var date = OffsetDateTime.parse(dateString);
-        var content = "content";
-        var task = new PalindromeTask(content, date);
+        var task = new PalindromeTask("content", OffsetDateTime.parse("2007-12-03T10:15:30+02:00"));
         if (!initLatch.await(LATCH_TIMEOUT_SECONDS, TimeUnit.SECONDS)) {
             fail("Init latch timed out");
         }
@@ -72,8 +68,8 @@ public class PalindromeServiceIT {
         palindromeService.processTask(task);
 
         PalindromeTaskEntity taskEntity = palindromeRepo.findAll().iterator().next();
-        PalindromeTask actualTask = taskMapper.entityToTask(taskEntity);
-        assertThat(actualTask).isEqualTo(task);
+        assertThat(taskEntity.getContent()).isEqualTo(task.getContent());
+        assertThat(taskEntity.getTimestamp()).isEqualTo(task.getTimestamp().withOffsetSameInstant(UTC));
 
         if (!finishLatch.await(LATCH_TIMEOUT_SECONDS, TimeUnit.SECONDS)) {
             fail("Finish latch timed out");

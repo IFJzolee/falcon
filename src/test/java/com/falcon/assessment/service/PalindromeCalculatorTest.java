@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.OffsetDateTime;
 
+import com.falcon.assessment.dao.PalindromeTaskEntity;
 import com.falcon.assessment.dto.CalculatedPalindrome;
-import com.falcon.assessment.dto.PalindromeTask;
 import org.junit.Test;
 
 public class PalindromeCalculatorTest {
@@ -22,7 +22,10 @@ public class PalindromeCalculatorTest {
 
     @Test
     public void properFieldMapping() {
-        var task = new PalindromeTask("aba", OffsetDateTime.now());
+        var task = PalindromeTaskEntity.builder()
+            .content("aba")
+            .timestamp(OffsetDateTime.now())
+            .build();
 
         CalculatedPalindrome calculatedPalindrome = calculator.calculate(task);
 
@@ -31,8 +34,10 @@ public class PalindromeCalculatorTest {
         assertThat(calculatedPalindrome.getLongestPalindromeSize()).isEqualTo(3);
     }
 
-    private PalindromeTask taskWithContent(String content) {
-        return new PalindromeTask(content, null);
+    private PalindromeTaskEntity taskWithContent(String content) {
+        return PalindromeTaskEntity.builder()
+            .content(content)
+            .build();
     }
 
 }

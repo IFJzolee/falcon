@@ -1,12 +1,13 @@
 package com.falcon.assessment.service;
 
+import com.falcon.assessment.dao.PalindromeTaskEntity;
 import com.falcon.assessment.dto.CalculatedPalindrome;
-import com.falcon.assessment.dto.PalindromeTask;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PalindromeCalculator {
-    public CalculatedPalindrome calculate(PalindromeTask task) {
+
+    public CalculatedPalindrome calculate(PalindromeTaskEntity task) {
         int longestLength = longestSubPalindromeLength(task.getContent());
         return new CalculatedPalindrome(task.getContent(), task.getTimestamp(), longestLength);
     }

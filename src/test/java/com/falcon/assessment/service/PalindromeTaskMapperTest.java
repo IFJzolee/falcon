@@ -14,33 +14,24 @@ public class PalindromeTaskMapperTest {
 
     @Test
     public void taskToEntity() {
-
-        String content = "content";
-        String offset = "+02:00";
-        OffsetDateTime timestamp = OffsetDateTime.parse("2007-12-03T10:15:30" + offset);
-        PalindromeTask task = new PalindromeTask(content, timestamp);
+        PalindromeTask task = new PalindromeTask("content", OffsetDateTime.parse("2007-12-03T10:15:30+02:00"));
 
         PalindromeTaskEntity entity = mapper.taskToEntity(task);
-        assertThat(entity.getContent()).isEqualTo(content);
-        assertThat(entity.getTimestamp()).isEqualTo(timestamp);
-        assertThat(entity.getTimestampOffset()).isEqualTo(offset);
+        assertThat(entity.getContent()).isEqualTo(task.getContent());
+        assertThat(entity.getTimestamp()).isEqualTo(task.getTimestamp());
     }
 
     @Test
     public void entityToTask() {
-        String content = "content";
-        String offset = "+02:00";
-        OffsetDateTime timestamp = OffsetDateTime.parse("2007-12-03T10:15:30" + offset);
         var entity = PalindromeTaskEntity.builder()
-            .content(content)
-            .timestamp(timestamp)
-            .timestampOffset(offset)
+            .content("content")
+            .timestamp(OffsetDateTime.parse("2007-12-03T10:15:30+02:00"))
             .build();
 
         PalindromeTask task = mapper.entityToTask(entity);
 
-        assertThat(task.getContent()).isEqualTo(content);
-        assertThat(task.getTimestamp()).isEqualTo(timestamp);
+        assertThat(task.getContent()).isEqualTo(entity.getContent());
+        assertThat(task.getTimestamp()).isEqualTo(entity.getTimestamp());
     }
 
 }

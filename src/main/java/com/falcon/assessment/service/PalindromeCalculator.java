@@ -1,5 +1,9 @@
 package com.falcon.assessment.service;
 
+import static com.falcon.assessment.service.util.StringUtils.alphabeticSubstrings;
+
+import java.util.List;
+
 import com.falcon.assessment.dto.CalculatedPalindromeDto;
 import org.springframework.stereotype.Component;
 
@@ -7,9 +11,18 @@ import org.springframework.stereotype.Component;
 public class PalindromeCalculator {
 
     public CalculatedPalindromeDto calculate(PalindromeTask task) {
-        int longestLength = longestSubPalindromeLength(task.getContent());
+        // FIXME works with ascii only
+        List<String> tokens = alphabeticSubstrings(task.getContent());
+        int longestLength = 0;
+        for (String token : tokens) {
+            int length = longestSubPalindromeLength(token);
+            if (length > longestLength) {
+                longestLength = length;
+            }
+        }
         return new CalculatedPalindromeDto(task.getContent(), task.getTimestamp(), longestLength);
     }
+
 
     private int longestSubPalindromeLength(String s) {
         if (s == null || s.length() < 1) {

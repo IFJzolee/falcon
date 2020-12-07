@@ -17,6 +17,7 @@ public class PalindromeCalculatorTest {
         assertThat(calculator.calculate(taskWithContent("a")).getLongestPalindromeSize()).isEqualTo(1);
         assertThat(calculator.calculate(taskWithContent("aba")).getLongestPalindromeSize()).isEqualTo(3);
         assertThat(calculator.calculate(taskWithContent("babad")).getLongestPalindromeSize()).isEqualTo(3);
+        assertThat(calculator.calculate(taskWithContent("abba1abba")).getLongestPalindromeSize()).isEqualTo(4);
     }
 
     @Test

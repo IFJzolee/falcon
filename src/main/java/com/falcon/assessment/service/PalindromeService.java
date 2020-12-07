@@ -6,9 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.falcon.assessment.dao.PalindromeRepository;
-import com.falcon.assessment.dao.PalindromeTaskEntity;
-import com.falcon.assessment.dto.CalculatedPalindrome;
-import com.falcon.assessment.dto.PalindromeTask;
+import com.falcon.assessment.dto.CalculatedPalindromeDto;
+import com.falcon.assessment.dto.PalindromeTaskDto;
 import com.falcon.assessment.messaging.UIConnector;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -23,25 +22,25 @@ public class PalindromeService {
     private final UIConnector uiConnector;
     private final PalindromeCalculator palindromeCalculator;
 
-    public void processTask(PalindromeTask task) {
+    public void processTask(PalindromeTaskDto taskDto) {
         /* TODO generate unique ID on publish side and ignore db conflict
         inorder to prevent multiple inserts in a multi instance env.
         Could be easily avoided if the task was stored at the time of rest reception.
         */
-        PalindromeTaskEntity entity = taskMapper.taskToEntity(task);
-        palindromeRepository.save(entity);
+        PalindromeTask task = taskMapper.dtoToTask(taskDto);
+        palindromeRepository.save(task);
 
-        uiConnector.broadcastPalindromeTask(task);
+        uiConnector.broadcastPalindromeTask(taskDto);
     }
 
-    public List<CalculatedPalindrome> getCalculatedPalindromes() {
-        var entities = new ArrayList<PalindromeTaskEntity>();
-        for (PalindromeTaskEntity entity : palindromeRepository.findAll(Sort.by(Sort.Direction.ASC, "id"))) {
-            entities.add(entity);
+    public List<CalculatedPalindromeDto> getCalculatedPalindromes() {
+        var tasks = new ArrayList<PalindromeTask>();
+        for (PalindromeTask task : palindromeRepository.findAll(Sort.by(Sort.Direction.ASC, "id"))) {
+            tasks.add(task);
         }
 
         // TODO It's ineffective to calculate it on the fly, but it is in the requirement...
-        return entities.stream()
+        return tasks.stream()
             .map(palindromeCalculator::calculate)
             .collect(toList());
     }

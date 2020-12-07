@@ -1,4 +1,4 @@
-package com.falcon.assessment.dao;
+package com.falcon.assessment.service;
 
 import java.time.OffsetDateTime;
 
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "palindrome")
-public class PalindromeTaskEntity {
+public class PalindromeTask {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,7 +23,7 @@ public class PalindromeTaskEntity {
     @Column
     private OffsetDateTime timestamp;
 
-    public PalindromeTaskEntity(String content, OffsetDateTime timestamp) {
+    public PalindromeTask(String content, OffsetDateTime timestamp) {
         this.content = content;
         this.timestamp = timestamp;
     }

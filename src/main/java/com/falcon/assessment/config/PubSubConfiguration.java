@@ -1,6 +1,6 @@
 package com.falcon.assessment.config;
 
-import com.falcon.assessment.dto.PalindromeTask;
+import com.falcon.assessment.dto.PalindromeTaskDto;
 import com.falcon.assessment.messaging.PalindromeTaskListener;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,16 +18,16 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 public class PubSubConfiguration {
 
     @Bean
-    public Jackson2JsonRedisSerializer<PalindromeTask> palindromeTaskSerializer(ObjectMapper objectMapper) {
-        var serializer = new Jackson2JsonRedisSerializer(PalindromeTask.class);
+    public Jackson2JsonRedisSerializer<PalindromeTaskDto> palindromeTaskSerializer(ObjectMapper objectMapper) {
+        var serializer = new Jackson2JsonRedisSerializer(PalindromeTaskDto.class);
         serializer.setObjectMapper(objectMapper);
         return serializer;
     }
 
     @Bean
-    public RedisTemplate<String, PalindromeTask> redisTemplate(JedisConnectionFactory connFactory,
-        RedisSerializer<PalindromeTask> serializer) {
-        RedisTemplate<String, PalindromeTask> template = new RedisTemplate<>();
+    public RedisTemplate<String, PalindromeTaskDto> redisTemplate(JedisConnectionFactory connFactory,
+        RedisSerializer<PalindromeTaskDto> serializer) {
+        RedisTemplate<String, PalindromeTaskDto> template = new RedisTemplate<>();
         template.setConnectionFactory(connFactory);
         template.setValueSerializer(serializer);
         return template;

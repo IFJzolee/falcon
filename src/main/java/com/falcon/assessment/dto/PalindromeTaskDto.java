@@ -11,7 +11,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 @Data
-public class PalindromeTask {
+public class PalindromeTaskDto {
 
     @Length(min = 1, max = 1000)
     private final String content;
@@ -20,7 +20,7 @@ public class PalindromeTask {
     private final OffsetDateTime timestamp;
 
     @JsonCreator
-    public PalindromeTask(
+    public PalindromeTaskDto(
         @JsonProperty("content") String content,
         @JsonProperty("timestamp") OffsetDateTime timestamp) {
         this.content = content;

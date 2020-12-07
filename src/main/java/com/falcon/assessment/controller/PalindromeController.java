@@ -6,8 +6,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import com.falcon.assessment.dto.CalculatedPalindrome;
-import com.falcon.assessment.dto.PalindromeTask;
+import com.falcon.assessment.dto.CalculatedPalindromeDto;
+import com.falcon.assessment.dto.PalindromeTaskDto;
 import com.falcon.assessment.messaging.PalindromeTaskPublisher;
 import com.falcon.assessment.service.PalindromeService;
 import lombok.AllArgsConstructor;
@@ -27,14 +27,14 @@ public class PalindromeController {
     private final PalindromeService palindromeService;
 
     @PostMapping
-    public void createPalindromeTask(@RequestBody @Valid PalindromeTask request) {
+    public void createPalindromeTask(@RequestBody @Valid PalindromeTaskDto request) {
         log.info("Received: {}", request);
         palindromeTaskPublisher.publish(request);
     }
 
     // TODO paging
     @GetMapping
-    public List<CalculatedPalindrome> getCalculatedPalindromes() {
+    public List<CalculatedPalindromeDto> getCalculatedPalindromes() {
         log.info("Get calculated palindromes");
         return palindromeService.getCalculatedPalindromes();
     }

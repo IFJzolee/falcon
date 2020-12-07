@@ -15,8 +15,8 @@ import java.time.ZoneOffset;
 import java.util.List;
 
 import com.falcon.assessment.config.ObjectMapperConfiguration;
-import com.falcon.assessment.dto.CalculatedPalindrome;
-import com.falcon.assessment.dto.PalindromeTask;
+import com.falcon.assessment.dto.CalculatedPalindromeDto;
+import com.falcon.assessment.dto.PalindromeTaskDto;
 import com.falcon.assessment.messaging.PalindromeTaskPublisher;
 import com.falcon.assessment.service.PalindromeService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -48,7 +48,7 @@ public class PalindromeControllerTest {
 
     @Test
     public void createTask_withNullValues() throws Exception {
-        var request = new PalindromeTask(null, null);
+        var request = new PalindromeTaskDto(null, null);
 
         mockMvc.perform(post(BASE_PATH)
             .contentType(APPLICATION_JSON)
@@ -58,7 +58,7 @@ public class PalindromeControllerTest {
 
     @Test
     public void createTask_withEmptyContent() throws Exception {
-        var request = new PalindromeTask("", OffsetDateTime.now());
+        var request = new PalindromeTaskDto("", OffsetDateTime.now());
 
         mockMvc.perform(post(BASE_PATH)
             .contentType(APPLICATION_JSON)
@@ -81,7 +81,7 @@ public class PalindromeControllerTest {
     public void createTask_properTimestampParsing() throws Exception {
         String content = "abrakadabra";
         OffsetDateTime timestamp = OffsetDateTime.of(2018, 10, 9, 0, 12, 12, 0, ZoneOffset.ofHours(1));
-        PalindromeTask expectedTask = new PalindromeTask(content, timestamp);
+        PalindromeTaskDto expectedTask = new PalindromeTaskDto(content, timestamp);
 
         mockMvc.perform(post(BASE_PATH)
             .contentType(APPLICATION_JSON)
@@ -91,7 +91,7 @@ public class PalindromeControllerTest {
                 + "}", content)))
             .andExpect(status().isOk());
 
-        ArgumentCaptor<PalindromeTask> captor = ArgumentCaptor.forClass(PalindromeTask.class);
+        ArgumentCaptor<PalindromeTaskDto> captor = ArgumentCaptor.forClass(PalindromeTaskDto.class);
         verify(palindromeTaskPublisherMock).publish(captor.capture());
         assertThat(captor.getValue()).isEqualTo(expectedTask);
     }
@@ -107,9 +107,9 @@ public class PalindromeControllerTest {
 
     @Test
     public void getCalculatedPalindromes() throws Exception {
-        var caledPalindrome1 = new CalculatedPalindrome("a", OffsetDateTime.parse("2007-12-03T10:15:30+02:00"), 1);
-        var caledPalindrome2 = new CalculatedPalindrome("aba", OffsetDateTime.parse("2007-12-03T05:15:30+03:00"), 3);
-        var result = List.of(caledPalindrome1, caledPalindrome2);
+        var calcdPalindrome1 = new CalculatedPalindromeDto("a", OffsetDateTime.parse("2007-12-03T10:15:30+02:00"), 1);
+        var calcdPalindrome2 = new CalculatedPalindromeDto("aba", OffsetDateTime.parse("2007-12-03T05:15:30+03:00"), 3);
+        var result = List.of(calcdPalindrome1, calcdPalindrome2);
         when(palindromeServiceMock.getCalculatedPalindromes()).thenReturn(result);
 
         String respBody = mockMvc.perform(get(BASE_PATH)
@@ -117,8 +117,8 @@ public class PalindromeControllerTest {
             .andExpect(status().isOk())
             .andReturn().getResponse().getContentAsString();
 
-        List<CalculatedPalindrome> actualResult = objectMapper.readValue(respBody,
-            new TypeReference<List<CalculatedPalindrome>>() {
+        List<CalculatedPalindromeDto> actualResult = objectMapper.readValue(respBody,
+            new TypeReference<List<CalculatedPalindromeDto>>() {
             });
         assertThat(actualResult).isEqualTo(result);
     }

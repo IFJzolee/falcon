@@ -14,9 +14,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import com.falcon.assessment.dao.PalindromeRepository;
-import com.falcon.assessment.dao.PalindromeTaskEntity;
-import com.falcon.assessment.dto.CalculatedPalindrome;
-import com.falcon.assessment.dto.PalindromeTask;
+import com.falcon.assessment.dto.CalculatedPalindromeDto;
+import com.falcon.assessment.dto.PalindromeTaskDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -60,21 +59,21 @@ public class PalindromeServiceIT {
         stompClient.connect(String.format("ws://localhost:%d/connect", port),
             stompHandler);
 
-        var task = new PalindromeTask("content", OffsetDateTime.parse("2007-12-03T10:15:30+02:00"));
+        var taskDto = new PalindromeTaskDto("content", OffsetDateTime.parse("2007-12-03T10:15:30+02:00"));
         if (!initLatch.await(LATCH_TIMEOUT_SECONDS, TimeUnit.SECONDS)) {
             fail("Init latch timed out");
         }
 
-        palindromeService.processTask(task);
+        palindromeService.processTask(taskDto);
 
-        PalindromeTaskEntity taskEntity = palindromeRepo.findAll().iterator().next();
-        assertThat(taskEntity.getContent()).isEqualTo(task.getContent());
-        assertThat(taskEntity.getTimestamp()).isEqualTo(task.getTimestamp().withOffsetSameInstant(UTC));
+        PalindromeTask task = palindromeRepo.findAll().iterator().next();
+        assertThat(task.getContent()).isEqualTo(taskDto.getContent());
+        assertThat(task.getTimestamp()).isEqualTo(taskDto.getTimestamp().withOffsetSameInstant(UTC));
 
         if (!finishLatch.await(LATCH_TIMEOUT_SECONDS, TimeUnit.SECONDS)) {
             fail("Finish latch timed out");
         }
-        assertThat(stompHandler.getResult()).isEqualTo(task);
+        assertThat(stompHandler.getResult()).isEqualTo(taskDto);
     }
 
     @Test
@@ -84,14 +83,14 @@ public class PalindromeServiceIT {
 
     @Test
     public void getCalculatedPalindromes() throws InterruptedException {
-        var task1 = new PalindromeTask("aba", OffsetDateTime.now());
-        var task2 = new PalindromeTask("a", OffsetDateTime.now());
-        palindromeService.processTask(task1);
-        palindromeService.processTask(task2);
-        var expectedCalcedPalindrome1 = new CalculatedPalindrome(task1.getContent(), task1.getTimestamp(), 3);
-        var expectedCalcedPalindrome2 = new CalculatedPalindrome(task2.getContent(), task2.getTimestamp(), 1);
+        var taskDto1 = new PalindromeTaskDto("aba", OffsetDateTime.now());
+        var taskDto2 = new PalindromeTaskDto("a", OffsetDateTime.now());
+        palindromeService.processTask(taskDto1);
+        palindromeService.processTask(taskDto2);
+        var expectedCalcedPalindrome1 = new CalculatedPalindromeDto(taskDto1.getContent(), taskDto1.getTimestamp(), 3);
+        var expectedCalcedPalindrome2 = new CalculatedPalindromeDto(taskDto2.getContent(), taskDto2.getTimestamp(), 1);
 
-        List<CalculatedPalindrome> actualCalculatedPalindromes = palindromeService.getCalculatedPalindromes();
+        List<CalculatedPalindromeDto> actualCalculatedPalindromes = palindromeService.getCalculatedPalindromes();
 
         assertThat(actualCalculatedPalindromes).contains(expectedCalcedPalindrome1, expectedCalcedPalindrome2);
     }
@@ -102,7 +101,7 @@ public class PalindromeServiceIT {
         private final CountDownLatch initLatch;
         private final CountDownLatch finishLatch;
         private final String topic;
-        private PalindromeTask result;
+        private PalindromeTaskDto result;
 
         private PalindromeTaskStompConsumer(CountDownLatch initLatch, CountDownLatch finishLatch, String topic) {
             this.initLatch = initLatch;
@@ -116,13 +115,13 @@ public class PalindromeServiceIT {
 
                 @Override
                 public Type getPayloadType(StompHeaders headers) {
-                    return PalindromeTask.class;
+                    return PalindromeTaskDto.class;
                 }
 
                 @Override
                 public void handleFrame(StompHeaders headers, Object payload) {
-                    if (payload instanceof PalindromeTask) {
-                        result = (PalindromeTask) payload;
+                    if (payload instanceof PalindromeTaskDto) {
+                        result = (PalindromeTaskDto) payload;
                     } else {
                         log.error("Payload has the wrong instance type");
                     }
@@ -143,7 +142,7 @@ public class PalindromeServiceIT {
             log.error("Handling exception", ex);
         }
 
-        public PalindromeTask getResult() {
+        public PalindromeTaskDto getResult() {
             return result;
         }
 

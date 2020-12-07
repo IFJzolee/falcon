@@ -9,6 +9,7 @@ import java.time.OffsetDateTime;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.falcon.assessment.service.PalindromeTask;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +31,12 @@ public class PalindromeRepositoryIT {
     public void savesAndGet() {
         var date = OffsetDateTime.parse("2007-12-03T10:15:30+02:00");
         var expectedUtcDate = date.withOffsetSameInstant(UTC);
-        var palindromeTask = PalindromeTaskEntity.builder()
+        var palindromeTask = PalindromeTask.builder()
             .content("content")
             .timestamp(date)
             .build();
 
-        PalindromeTaskEntity saved = palindromeRepo.save(palindromeTask);
+        PalindromeTask saved = palindromeRepo.save(palindromeTask);
         flushAndClearPersistenceCtx();
 
         assertThat(saved.getId()).isNotNull();

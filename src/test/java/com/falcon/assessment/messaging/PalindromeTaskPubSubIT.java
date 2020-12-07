@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 import com.falcon.assessment.config.ObjectMapperConfiguration;
 import com.falcon.assessment.config.PubSubConfiguration;
 import com.falcon.assessment.config.RedisConnectionConfiguration;
-import com.falcon.assessment.dto.PalindromeTask;
+import com.falcon.assessment.dto.PalindromeTaskDto;
 import com.falcon.assessment.service.PalindromeService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,14 +47,14 @@ public class PalindromeTaskPubSubIT {
             latch.countDown();
             return null;
         }).when(palindromeServiceMock).processTask(any());
-        PalindromeTask task = new PalindromeTask("content", OffsetDateTime.parse("2007-12-03T10:15:30+02:00"));
+        PalindromeTaskDto task = new PalindromeTaskDto("content", OffsetDateTime.parse("2007-12-03T10:15:30+02:00"));
 
         taskPublisher.publish(task);
         if (!latch.await(2, TimeUnit.SECONDS)) {
             fail("Latch timed out");
         }
 
-        var captor = ArgumentCaptor.forClass(PalindromeTask.class);
+        var captor = ArgumentCaptor.forClass(PalindromeTaskDto.class);
         verify(palindromeServiceMock).processTask(captor.capture());
         assertThat(captor.getValue()).isEqualTo(task);
     }

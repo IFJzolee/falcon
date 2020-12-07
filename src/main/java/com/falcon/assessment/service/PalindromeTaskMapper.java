@@ -1,14 +1,13 @@
 package com.falcon.assessment.service;
 
-import com.falcon.assessment.dao.PalindromeTaskEntity;
-import com.falcon.assessment.dto.PalindromeTask;
+import com.falcon.assessment.dto.PalindromeTaskDto;
 import org.mapstruct.Mapper;
 
 @Mapper
 public interface PalindromeTaskMapper {
 
-    PalindromeTaskEntity taskToEntity(PalindromeTask task);
+    PalindromeTask dtoToTask(PalindromeTaskDto task);
 
-    PalindromeTask entityToTask(PalindromeTaskEntity entity);
+    PalindromeTaskDto taskToDto(PalindromeTask entity);
 
 }

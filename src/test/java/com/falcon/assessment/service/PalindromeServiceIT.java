@@ -14,8 +14,8 @@ import java.util.concurrent.TimeUnit;
 
 import com.falcon.assessment.dao.PalindromeRepository;
 import com.falcon.assessment.dao.PalindromeTaskEntity;
-import com.falcon.assessment.domain.CalculatedPalindrome;
-import com.falcon.assessment.domain.PalindromeTask;
+import com.falcon.assessment.dto.CalculatedPalindrome;
+import com.falcon.assessment.dto.PalindromeTask;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;

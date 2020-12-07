@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.OffsetDateTime;
 
-import com.falcon.assessment.domain.CalculatedPalindrome;
-import com.falcon.assessment.domain.PalindromeTask;
+import com.falcon.assessment.dto.CalculatedPalindrome;
+import com.falcon.assessment.dto.PalindromeTask;
 import org.junit.Test;
 
 public class PalindromeCalculatorTest {

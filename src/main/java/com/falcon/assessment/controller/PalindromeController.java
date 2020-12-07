@@ -6,8 +6,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import com.falcon.assessment.domain.CalculatedPalindrome;
-import com.falcon.assessment.domain.PalindromeTask;
+import com.falcon.assessment.dto.CalculatedPalindrome;
+import com.falcon.assessment.dto.PalindromeTask;
 import com.falcon.assessment.messaging.PalindromeTaskPublisher;
 import com.falcon.assessment.service.PalindromeService;
 import lombok.AllArgsConstructor;

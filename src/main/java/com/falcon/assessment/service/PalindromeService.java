@@ -7,8 +7,8 @@ import java.util.List;
 
 import com.falcon.assessment.dao.PalindromeRepository;
 import com.falcon.assessment.dao.PalindromeTaskEntity;
-import com.falcon.assessment.domain.CalculatedPalindrome;
-import com.falcon.assessment.domain.PalindromeTask;
+import com.falcon.assessment.dto.CalculatedPalindrome;
+import com.falcon.assessment.dto.PalindromeTask;
 import com.falcon.assessment.messaging.UIConnector;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;

@@ -1,7 +1,7 @@
 package com.falcon.assessment.service;
 
 import com.falcon.assessment.dao.PalindromeTaskEntity;
-import com.falcon.assessment.domain.PalindromeTask;
+import com.falcon.assessment.dto.PalindromeTask;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

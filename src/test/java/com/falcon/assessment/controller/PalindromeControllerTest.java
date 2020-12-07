@@ -15,8 +15,8 @@ import java.time.ZoneOffset;
 import java.util.List;
 
 import com.falcon.assessment.config.ObjectMapperConfiguration;
-import com.falcon.assessment.domain.CalculatedPalindrome;
-import com.falcon.assessment.domain.PalindromeTask;
+import com.falcon.assessment.dto.CalculatedPalindrome;
+import com.falcon.assessment.dto.PalindromeTask;
 import com.falcon.assessment.messaging.PalindromeTaskPublisher;
 import com.falcon.assessment.service.PalindromeService;
 import com.fasterxml.jackson.core.JsonProcessingException;

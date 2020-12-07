@@ -1,7 +1,7 @@
 package com.falcon.assessment.service;
 
-import com.falcon.assessment.domain.CalculatedPalindrome;
-import com.falcon.assessment.domain.PalindromeTask;
+import com.falcon.assessment.dto.CalculatedPalindrome;
+import com.falcon.assessment.dto.PalindromeTask;
 import org.springframework.stereotype.Component;
 
 @Component

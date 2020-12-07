@@ -1,4 +1,4 @@
-package com.falcon.assessment.domain;
+package com.falcon.assessment.dto;
 
 import java.time.OffsetDateTime;
 

@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 import com.falcon.assessment.config.ObjectMapperConfiguration;
 import com.falcon.assessment.config.PubSubConfiguration;
 import com.falcon.assessment.config.RedisConnectionConfiguration;
-import com.falcon.assessment.domain.PalindromeTask;
+import com.falcon.assessment.dto.PalindromeTask;
 import com.falcon.assessment.service.PalindromeService;
 import org.junit.Test;
 import org.junit.runner.RunWith;

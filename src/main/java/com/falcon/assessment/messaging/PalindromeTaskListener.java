@@ -1,6 +1,6 @@
 package com.falcon.assessment.messaging;
 
-import com.falcon.assessment.domain.PalindromeTask;
+import com.falcon.assessment.dto.PalindromeTask;
 import com.falcon.assessment.service.PalindromeService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.time.OffsetDateTime;
 
 import com.falcon.assessment.dao.PalindromeTaskEntity;
-import com.falcon.assessment.domain.PalindromeTask;
+import com.falcon.assessment.dto.PalindromeTask;
 import org.junit.Test;
 
 public class PalindromeTaskMapperTest {

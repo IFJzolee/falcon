@@ -8,11 +8,13 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TES
 
 import java.lang.reflect.Type;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import com.falcon.assessment.dao.PalindromeRepository;
 import com.falcon.assessment.dao.PalindromeTaskEntity;
+import com.falcon.assessment.domain.CalculatedPalindrome;
 import com.falcon.assessment.domain.PalindromeTask;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -77,6 +79,25 @@ public class PalindromeServiceIT {
             fail("Finish latch timed out");
         }
         assertThat(stompHandler.getResult()).isEqualTo(task);
+    }
+
+    @Test
+    public void getCalculatedPalindromes_emptyResult() throws InterruptedException {
+        assertThat(palindromeService.getCalculatedPalindromes()).isEmpty();
+    }
+
+    @Test
+    public void getCalculatedPalindromes() throws InterruptedException {
+        var task1 = new PalindromeTask("aba", OffsetDateTime.now());
+        var task2 = new PalindromeTask("a", OffsetDateTime.now());
+        palindromeService.processTask(task1);
+        palindromeService.processTask(task2);
+        var expectedCalcedPalindrome1 = new CalculatedPalindrome(task1.getContent(), task1.getTimestamp(), 3);
+        var expectedCalcedPalindrome2 = new CalculatedPalindrome(task2.getContent(), task2.getTimestamp(), 1);
+
+        List<CalculatedPalindrome> actualCalculatedPalindromes = palindromeService.getCalculatedPalindromes();
+
+        assertThat(actualCalculatedPalindromes).contains(expectedCalcedPalindrome1, expectedCalcedPalindrome2);
     }
 
     @Slf4j

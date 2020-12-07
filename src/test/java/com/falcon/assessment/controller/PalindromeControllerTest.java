@@ -1,19 +1,26 @@
 package com.falcon.assessment.controller;
 
 import static com.falcon.assessment.controller.PalindromeController.BASE_PATH;
+import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.List;
 
 import com.falcon.assessment.config.ObjectMapperConfiguration;
+import com.falcon.assessment.domain.CalculatedPalindrome;
 import com.falcon.assessment.domain.PalindromeTask;
 import com.falcon.assessment.messaging.PalindromeTaskPublisher;
+import com.falcon.assessment.service.PalindromeService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,10 +42,12 @@ public class PalindromeControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
     @MockBean
-    private PalindromeTaskPublisher palindromeTaskPublisher;
+    private PalindromeTaskPublisher palindromeTaskPublisherMock;
+    @MockBean
+    private PalindromeService palindromeServiceMock;
 
     @Test
-    public void create_withNullValues() throws Exception {
+    public void createTask_withNullValues() throws Exception {
         var request = new PalindromeTask(null, null);
 
         mockMvc.perform(post(BASE_PATH)
@@ -48,7 +57,7 @@ public class PalindromeControllerTest {
     }
 
     @Test
-    public void create_withEmptyContent() throws Exception {
+    public void createTask_withEmptyContent() throws Exception {
         var request = new PalindromeTask("", OffsetDateTime.now());
 
         mockMvc.perform(post(BASE_PATH)
@@ -58,7 +67,7 @@ public class PalindromeControllerTest {
     }
 
     @Test
-    public void create_withInvalidDateFormat() throws Exception {
+    public void createTask_withInvalidDateFormat() throws Exception {
         mockMvc.perform(post(BASE_PATH)
             .contentType(APPLICATION_JSON)
             .content("{\n"
@@ -69,7 +78,7 @@ public class PalindromeControllerTest {
     }
 
     @Test
-    public void create_properTimestampParsing() throws Exception {
+    public void createTask_properTimestampParsing() throws Exception {
         String content = "abrakadabra";
         OffsetDateTime timestamp = OffsetDateTime.of(2018, 10, 9, 0, 12, 12, 0, ZoneOffset.ofHours(1));
         PalindromeTask expectedTask = new PalindromeTask(content, timestamp);
@@ -83,13 +92,39 @@ public class PalindromeControllerTest {
             .andExpect(status().isOk());
 
         ArgumentCaptor<PalindromeTask> captor = ArgumentCaptor.forClass(PalindromeTask.class);
-        verify(palindromeTaskPublisher).publish(captor.capture());
+        verify(palindromeTaskPublisherMock).publish(captor.capture());
         assertThat(captor.getValue()).isEqualTo(expectedTask);
     }
 
+    @Test
+    public void getCalculatedPalindromes_emptyList() throws Exception {
+        when(palindromeServiceMock.getCalculatedPalindromes()).thenReturn(emptyList());
+
+        mockMvc.perform(get(BASE_PATH)
+            .contentType(APPLICATION_JSON))
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    public void getCalculatedPalindromes() throws Exception {
+        var caledPalindrome1 = new CalculatedPalindrome("a", OffsetDateTime.parse("2007-12-03T10:15:30+02:00"), 1);
+        var caledPalindrome2 = new CalculatedPalindrome("aba", OffsetDateTime.parse("2007-12-03T05:15:30+03:00"), 3);
+        var result = List.of(caledPalindrome1, caledPalindrome2);
+        when(palindromeServiceMock.getCalculatedPalindromes()).thenReturn(result);
+
+        String respBody = mockMvc.perform(get(BASE_PATH)
+            .contentType(APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andReturn().getResponse().getContentAsString();
+
+        List<CalculatedPalindrome> actualResult = objectMapper.readValue(respBody,
+            new TypeReference<List<CalculatedPalindrome>>() {
+            });
+        assertThat(actualResult).isEqualTo(result);
+    }
+
     private <T> String json(T obj) throws JsonProcessingException {
-        String v = objectMapper.writeValueAsString(obj);
-        return v;
+        return objectMapper.writeValueAsString(obj);
     }
 
 }

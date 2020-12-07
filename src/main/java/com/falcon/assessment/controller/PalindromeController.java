@@ -2,33 +2,41 @@ package com.falcon.assessment.controller;
 
 import static com.falcon.assessment.controller.PalindromeController.BASE_PATH;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
+import com.falcon.assessment.domain.CalculatedPalindrome;
 import com.falcon.assessment.domain.PalindromeTask;
 import com.falcon.assessment.messaging.PalindromeTaskPublisher;
+import com.falcon.assessment.service.PalindromeService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(BASE_PATH)
 @Slf4j
+@AllArgsConstructor
 public class PalindromeController {
 
+    // TODO not on same paths?
     public static final String BASE_PATH = "/api/palindrome";
 
     private final PalindromeTaskPublisher palindromeTaskPublisher;
-
-    public PalindromeController(PalindromeTaskPublisher palindromeTaskPublisher) {
-        this.palindromeTaskPublisher = palindromeTaskPublisher;
-    }
+    private final PalindromeService palindromeService;
 
     @PostMapping
-    public void createPalindrome(@RequestBody @Valid PalindromeTask request) {
+    public void createPalindromeTask(@RequestBody @Valid PalindromeTask request) {
         log.info("Received: {}", request);
         palindromeTaskPublisher.publish(request);
+    }
+
+    // TODO paging
+    @GetMapping
+    public List<CalculatedPalindrome> getCalculatedPalindromes() {
+        log.info("Get calculated palindromes");
+        return palindromeService.getCalculatedPalindromes();
     }
 
 }
